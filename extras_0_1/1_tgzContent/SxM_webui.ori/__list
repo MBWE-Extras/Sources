@@ -1,0 +1,14 @@
+/proto/SxM_webui/index.php
+/proto/SxM_webui/admin/bt_guiconfig.inc
+/proto/SxM_webui/admin/guiconfig.inc
+/proto/SxM_webui/admin/system_index.php
+/proto/SxM_webui/admin/inc/wixLang.class
+/proto/SxM_webui/admin/inc/wixHTML.class
+/proto/SxM_webui/cpsync/csm_fbengin.inc
+/proto/SxM_webui/ctcs/bt.php
+/proto/SxM_webui/ctcs/bt_ctcsconfig.inc
+/proto/SxM_webui/ctcs/ctcsconfig.inc
+/proto/SxM_webui/ctcs/dn_fbegin.inc
+/proto/SxM_webui/ctcs/index.php
+
+/proto/SxM_webui/fpkmgr/index.php

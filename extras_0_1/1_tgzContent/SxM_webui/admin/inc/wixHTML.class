@@ -1,0 +1,592 @@
+<?php
+
+/**
+ * @version $Id: wixHTML.class,v 1.52.4.15.2.6 2009/06/30 07:40:40 jason Exp $
+ * @author Wiley Li <wileyli@wistron.com.tw>
+ * @copyright Copyright (c) 2004 Wistron Corporation.
+ */
+$_homepage = "#";
+
+require_once('homepage_url.inc');
+require_once('wixConfig.class');
+
+define ('__INFO_SUCCESS__', 'SUCCESS');
+define ('__INFO_WARNING__', 'WARNING');
+define ('__INFO_ERROR__',   'ERROR');
+
+define ('__IMG_SLOGO__',           'small_logo.jpg'); // small logo
+define ('__IMG_SUCCESS__',         'check.gif');
+define ('__IMG_WARNING__',         'exclam.gif');
+define ('__IMG_ERROR__',           'err.gif');
+define ('__IMG_ADD__',             'add.gif');
+define ('__IMG_EDIT__',            'edit.gif');
+define ('__IMG_DEL__',             'del.gif');
+define ('__IMG_ENABLE__',          'enabled.gif');
+define ('__IMG_DISABLE__',         'disabled.gif');
+define ('__IMG_BLOCK1__',          'red_block.gif');
+define ('__IMG_BLOCK2__',          'blue_block.gif');
+define ('__IMG_ICON1__',           'red.gif');
+define ('__IMG_ICON2__',           'blue.gif');
+define ('__IMG_ICON3__',           'green.gif');
+define ('__IMG_ICON4__',           'pink.gif');
+define ('__IMG_ADMIN_USER__',      'admin_user.gif');
+define ('__IMG_NORMAL_USER__',     'normal_user.gif');
+define ('__IMG_READONLY_USER__',   'readonly_user.gif');
+define ('__IMG_FULL_USER__',       'full_user.gif');
+define ('__IMG_DENY_USER__',       'deny_user.gif');
+define ('__IMG_NO_ASSIGN_USER__',  'no_assign_user.gif');
+define ('__IMG_READONLY_GROUP__',  'readonly_group.gif');
+define ('__IMG_FULL_GROUP__',      'full_group.gif');
+define ('__IMG_DENY_GROUP__',      'deny_group.gif');
+define ('__IMG_PUBLIC_ACCESS__',   'public.gif');
+define ('__IMG_NO_ASSIGN_GROUP__', 'no_assign_group.gif');
+define ('__IMG_GROUP_EMPTY__',     'group_empty.gif');
+define ('__IMG_USER_NOGROUP__',    'user_nogroup.gif');
+define ('__IMG_USER_LIST__',       'user_list.gif');
+define ('__IMG_GROUP_LIST__',      'group_list.gif');
+define ('__IMG_CLEANUP_HD_DATA__', 'cleaup_hd_data.gif');
+define ('__IMG_STRIPT__',          'raid0.gif');       			// One stripe volume
+define ('__IMG_MIRROR__',          'raid1.gif');       // Two mirror volumes
+define ('__IMG_RAID5__',         	 'raid5.gif');      // One RAID 5 volume
+define ('__IMG_SPAN__',            'span.gif');       // One Span volume
+define ('__IMG_DEFAULT_SHR__',     'default_share.gif');
+define ('__IMG_CHGPASWD__',        'change_passwd.gif');
+define ('__IMG_HELP__',            'help.gif');
+define ('__IMG_EXPERT_MODE__',     'expert_mode.gif');
+define ('__IMG_EXPRESS_MODE__',    'express_mode.gif');
+define ('__IMG_LOGOUT__',          'logout.gif');
+define ('__IMG_CONFIGURATION__',   'configuration.gif');
+define ('__IMG_EXPLORER__',        'explorer.gif');
+define ('__IMG_USB_FORMAT__',      'usbformat.gif');
+define ('__IMG_USB_UNPLUG__',      'usbunplug.gif');
+define ('__IMG_CT_DOWNLOAD__',     'ct_download.gif');
+define ('__IMG_CT_UPLOAD__',       'ct_upload.gif');
+define ('__IMG_CT_REFRESH__',      'ct_refresh.gif');
+define ('__IMG_CT_UPDATE__',       'ct_update.gif');
+define ('__IMG_CT_RESTART__',      'ct_restart.gif');
+define ('__IMG_CT_FURINFO__',      'ct_further_info.gif');
+define ('__IMG_CT_START__',        'ct_start.gif');
+define ('__IMG_CT_PAUSE__',        'ct_pause.gif');
+define ('__IMG_CT_STOP__',         'ct_stop.gif');
+define ('__IMG_CT_S_CONNECT_T__',  'ct_s_connect_t.gif'); // connecting to tracker to start
+define ('__IMG_CT_S_CONNECT_P__',  'ct_s_connect_p.gif'); // connecting to peers
+define ('__IMG_CT_S_PEER__',       'ct_s_peer.gif');      // incomplete & downloading/uploading (peer)
+define ('__IMG_CT_S_SEED__',       'ct_s_seed.gif');      // complete & uploading (seed)
+define ('__IMG_CT_S_PAUSED__',     'ct_s_pasued.gif');    // paused
+define ('__IMG_CT_S_CHECK__',      'ct_s_check.gif');     // hash-checking data
+define ('__IMG_CT_S_PEER_STOP__',  'ct_s_peer_stop.gif'); // stopped & incomplete
+define ('__IMG_CT_S_SEED_STOP__',  'ct_s_seed_stop.gif'); // stopped & complete
+define ('__IMG_CT_S_QUEUED__',     'ct_s_queued.gif');    // queued
+define ('__IMG_CT_S_UNABLED__',    'ct_s_unabled.gif');   // unable to write to disk
+define ('__IMG_EXTEND__',          'extend.gif');
+define ('__IMG_HDD1__',            'HDD1.gif');
+define ('__IMG_HDD2__',            'HDD2.gif');
+define ('__IMG_HDD3__',            'HDD3.gif');
+define ('__IMG_HDD4__',            'HDD4.gif');
+define ('__IMG_HDD__',             'system_hdd.gif');
+define ('__IMG_ENABLE_GRAY__',     'enabled_gray.gif');
+
+
+define ('VNCELL_WIDTH',    22);
+define ('SHRRIGHT_HEIGHT', 5);
+
+class wixHTML extends wixConfig{
+  var $image;
+
+  function wixHTML(){
+    parent::wixConfig();
+
+    global $lang;
+
+    $this->lang  = $lang;
+    $this->image =
+      array(__IMG_BLOGO__           => array('width' => 520,  'height' => 150),
+            __IMG_SLOGO__           => array('width' => 200,  'height' => 52),
+            __IMG_SUCCESS__         => array('width' => 28,   'height' => 32),
+            __IMG_WARNING__         => array('width' => 28,   'height' => 32),
+            __IMG_ERROR__           => array('width' => 28,   'height' => 32),
+            __IMG_ADD__             => array('width' => 16,   'height' => 16),
+            __IMG_EDIT__            => array('width' => 16,   'height' => 16),
+            __IMG_DEL__             => array('width' => 16,   'height' => 16),
+            __IMG_ENABLE__          => array('width' => 16,   'height' => 16),
+            __IMG_DISABLE__         => array('width' => 16,   'height' => 16),
+            __IMG_BLOCK1__          => array('width' => 10,   'height' => 10),
+            __IMG_BLOCK2__          => array('width' => 10,   'height' => 10),
+            __IMG_ICON1__           => array('width' => 10,   'height' => 10),
+            __IMG_ICON2__           => array('width' => 10,   'height' => 10),
+            __IMG_ICON3__           => array('width' => 10,   'height' => 10),
+            __IMG_ICON4__           => array('width' => 10,   'height' => 10),
+            __IMG_ADMIN_USER__      => array('width' => 16,   'height' => 16),
+            __IMG_NORMAL_USER__     => array('width' => 16,   'height' => 16),
+            __IMG_READONLY_USER__   => array('width' => 16,   'height' => 16),
+            __IMG_FULL_USER__       => array('width' => 16,   'height' => 16),
+            __IMG_DENY_USER__       => array('width' => 16,   'height' => 16),
+            __IMG_NO_ASSIGN_USER__  => array('width' => 16,   'height' => 16),
+            __IMG_READONLY_GROUP__  => array('width' => 16,   'height' => 16),
+            __IMG_FULL_GROUP__      => array('width' => 16,   'height' => 16),
+            __IMG_DENY_GROUP__      => array('width' => 16,   'height' => 16),
+            __IMG_NO_ASSIGN_GROUP__ => array('width' => 16,   'height' => 16),
+            __IMG_GROUP_EMPTY__     => array('width' => 16,   'height' => 16),
+            __IMG_USER_NOGROUP__    => array('width' => 16,   'height' => 16),
+            __IMG_GROUP_LIST__      => array('width' => 16,   'height' => 16),
+            __IMG_USER_LIST__       => array('width' => 16,   'height' => 16),
+            __IMG_PUBLIC_ACCESS__   => array('width' => 16,   'height' => 16),
+            __IMG_CLEANUP_HD_DATA__ => array('width' => 16,   'height' => 16),
+            __IMG_STRIPT__          => array('width' => 210,  'height' => 150),
+            __IMG_MIRROR__          => array('width' => 210,  'height' => 150),
+            __IMG_RAID5__         	=> array('width' => 210,  'height' => 150),
+            __IMG_SPAN__          	=> array('width' => 210,  'height' => 150),
+            __IMG_R_twoMoneS__      => array('width' => 400,  'height' => 200),
+            __IMG_DEFAULT_SHR__     => array('width' => 16,   'height' => 16),
+            __IMG_CHGPASWD__        => array('width' => 16,   'height' => 16),
+            __IMG_HELP__            => array('width' => 16,   'height' => 16),
+            __IMG_EXPERT_MODE__     => array('width' => 16,   'height' => 16),
+            __IMG_EXPRESS_MODE__    => array('width' => 16,   'height' => 16),
+            __IMG_LOGOUT__          => array('width' => 16,   'height' => 16),
+            __IMG_CONFIGURATION__   => array('width' => 16,   'height' => 16),
+            __IMG_EXPLORER__        => array('width' => 16,   'height' => 16),
+            __IMG_USB_FORMAT__      => array('width' => 16,   'height' => 16),
+            __IMG_USB_UNPLUG__      => array('width' => 16,   'height' => 16),
+            __IMG_CT_DOWNLOAD__     => array('width' => 16,   'height' => 16),
+            __IMG_CT_UPLOAD__       => array('width' => 16,   'height' => 16),
+            __IMG_CT_REFRESH__      => array('width' => 16,   'height' => 16),
+            __IMG_CT_UPDATE__       => array('width' => 16,   'height' => 16),
+            __IMG_CT_RESTART__      => array('width' => 16,   'height' => 16),
+            __IMG_CT_FURINFO__      => array('width' => 16,   'height' => 16),
+            __IMG_CT_START__        => array('width' => 16,   'height' => 16),
+            __IMG_CT_PAUSE__        => array('width' => 16,   'height' => 16),
+            __IMG_CT_STOP__         => array('width' => 16,   'height' => 16),
+            __IMG_CT_S_CONNECT_T__  => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_CONNECT_P__  => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_PEER__       => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_SEED__       => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_PAUSED__     => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_CHECK__      => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_PEER_STOP__  => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_SEED_STOP__  => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_QUEUED__     => array('width' => 14,   'height' => 14),
+            __IMG_CT_S_UNABLED__    => array('width' => 14,   'height' => 14),
+            __IMG_EXTEND__          => array('width' => 16,   'height' => 16),
+            __IMG_HDD1__            => array('width' => 16,   'height' => 16),
+            __IMG_HDD2__            => array('width' => 16,   'height' => 16),
+            __IMG_HDD3__            => array('width' => 16,   'height' => 16),
+            __IMG_HDD4__            => array('width' => 16,   'height' => 16),
+						__IMG_HDD__           	=> array('width' => 300,   'height' => 200),
+            __IMG_ENABLE_GRAY__     => array('width' => 16,   'height' => 16));
+  }
+
+  function imgdir($dir = null){
+    return "/".((is_null($dir))?"admin":$dir)."/".$this->sys_var['image_dir_name']."/";
+  }
+
+  function submit_cancel_btn($css_class, $submit_js, $cancel_js){
+    $submit_str = "<input name=\"submit\" type=\"submit\" id=\"submit\" class=\"" . $css_class . "\" value=\"" .
+                  __STR_SUBMIT__ .
+                  "\" " .
+                  $submit_js .
+                  ">\n";
+    $cancel_str = "<input name=\"cancel\" type=\"button\" id=\"cancel\" class=\"" . $css_class . "\" value=\"" .
+                  __STR_CANCEL__ .
+                  "\" " .
+                  $cancel_js .
+                  ">\n";
+    return $submit_str.$cancel_str;
+  }
+
+  /*
+   * @param string $page
+   * @param string $anchor
+   * @return string
+   */
+  function Help($page = '', $title = '', $anchor = ''){
+    if ($anchor != '') { $anchor = "#{$anchor}"; }
+
+    return "/" . $this->sys_var['help_dir_name'] . "/{$page}.php?lang=".$GLOBALS["language"]."&page={$title}{$anchor}";
+  }
+
+  /*
+   * @param string $align
+   * @param string $css_class
+   * @param string $submit_js
+   * @param string $cancel_js
+   * @return string
+   */
+  function SubmitCancel($align = 'left', $css_class = 'formbtn', $submit_js = '', $cancel_js = ''){
+    if (!isset($align))     { $align     = 'left';    }
+    if (!isset($css_class)) { $css_class = 'formbtn'; }
+    if (!isset($submit_js)) { $submit_js = '';        }
+    if (!isset($cancel_js)) { $cancel_js = '';        }
+
+    $btn = "<!-- Submit && Cancel Buttons -->\n" .
+           "<tr>\n" .
+           "<td class=\"vncellempty\">&nbsp;</td>\n" .
+           "<td class=\"vtable\" style=\"text-align:".$align.";\">\n" .
+           $this->submit_cancel_btn($css_class, $submit_js, $cancel_js) .
+           "</td>\n" .
+           "</tr>\n";
+    return $btn;
+  }
+
+  /*
+   * @param string $direction
+   * @return string
+   */
+  function ColWidth($direction = 'left'){
+    switch($direction){
+      case 'left':
+        return htmlspecialchars(((VNCELL_WIDTH >= 100) ? 22 : VNCELL_WIDTH) . '%');
+      case 'right':
+        return htmlspecialchars(((VNCELL_WIDTH >= 100) ? 78 : (100 - VNCELL_WIDTH)) . '%');
+      default:
+        return htmlspecialchars('*');
+    }
+  }
+
+  /*
+   * @param string $src
+   * @param string $desc
+   * @param string $name
+   * @param string $style
+   * @param string $border
+   * @return string
+   */
+  function Image($src, $desc, $name = "", $style = "", $border = 0, $imgdir = null){
+    if (!isset($name))   { $name   = ""; }
+    if (!isset($style))  { $style  = ""; }
+    if (!isset($border)) { $border = 0;  }
+
+    $format = "<img src=\"" . $this->imgdir($imgdir) . "%s\" name=\"%s\" style=\"%s\" title=\"%s\" width=\"%d\" height=\"%d\" alt=\"%s\" border=\"%d\">";
+    return sprintf($format, $src,
+                            $name,
+                            $style,
+                            $desc,
+                            $this->image[$src]['width'],
+                            $this->image[$src]['height'],
+                            $desc,
+                            $border);
+  }
+
+  function SendMsg2Parent($info_type, $message){
+    @setcookie('info_type', $info_type);
+    @setcookie('message',   $message);
+  }
+
+  function GetChildPageMsg(&$info_type, &$message){
+    if (!empty($_COOKIE['info_type']) && !empty($_COOKIE['message'])) {
+      $info_type = $_COOKIE['info_type'];
+      $message   = $_COOKIE['message'];
+
+      if (time() > 0) {
+        @setcookie('info_type', '', time() - 3600);
+        @setcookie('message',   '', time() - 3600);
+      }
+    }
+  }
+
+  /*
+   * @param string $type __INFO_SUCCESS__ | __INFO_WARNING__ | __INFO_ERROR__
+   * @param mixed $message
+   * @return string
+   */
+  function InfoBox($type, $message) {
+    if ($type != __INFO_SUCCESS__ &&
+        $type != __INFO_WARNING__ &&
+        $type != __INFO_ERROR__) { return ""; }
+
+    if (empty($message)) { return ""; }
+
+    $infobox = "";
+    $box_style = array(__INFO_SUCCESS__ => array('img_bg'  => 'D2EBCC', // 027F02
+                                          'text_bg' => 'D2EBCC',
+                                          'desc'    => __STR_RTNSUCCESS__),
+                       __INFO_WARNING__ => array('img_bg'  => 'D9DEE8', // 687BA4
+                                          'text_bg' => 'D9DEE8',
+                                          'desc'    => __STR_RTNWARNING__),
+                       __INFO_ERROR__   => array('img_bg'  => 'FFD9D1', // A12A2A
+                                          'text_bg' => 'FFD9D1'),
+                                          'desc'    => __STR_RTNERROR__);
+    $img = ($type == __INFO_SUCCESS__) ? __IMG_SUCCESS__ : (($type == __INFO_WARNING__) ? __IMG_WARNING__ : __IMG_ERROR__);
+
+    $infobox = "<p>\n" .
+               "<table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" width=\"100%\">\n" .
+               "<tr>\n" .
+               "<td bgcolor=\"#" . $box_style[$type]['img_bg'] . "\" width=\"36\" align=\"center\" valign=\"top\">\n" .
+               $this->Image($img, $box_style[$type]['desc']) .
+               "</td>\n" .
+               "<td bgcolor=\"#" . $box_style[$type]['text_bg'] . "\" style=\"padding-left: 8px; padding-top: 6px\">\n" .
+               "<strong>\n" .
+               "<span" . (($type == __INFO_ERROR__) ? " class=\"errmsg\"" : "") . ">\n";
+
+    // The following input errors were detected
+    if (is_array($message)) {
+      $infobox .= "<p>".$this->lang['hooks']['errmsg'][60]."</p>\n" .
+                  "<ul>\n";
+
+      foreach ($message as $ierr) {
+        $infobox .= "<li>" . htmlspecialchars($ierr) . "</li>\n";
+      }
+
+      $infobox .= "</ul>\n";
+    } else {
+      $infobox .= $message . "\n";
+    }
+
+    $infobox .= "</span>\n" .
+                "</strong>\n";
+    if (($_debug_msg = $this->__debug_message()) != "" && $type == __INFO_ERROR__) {
+      $infobox .= "<br><span class=\"errmsg\"><strong>";
+      $_each_debug_msg = explode("\n", $_debug_msg);
+      foreach($_each_debug_msg as $_msg){
+        if (!empty($_msg)) {
+          $infobox .= "[Debug] $_msg<br>";
+        }
+      }
+      $infobox .= "</strong></span>";
+    }
+
+    $infobox .= "</td>\n" .
+                "</tr>\n" .
+                "</table>\n" .
+                "</p>\n";
+
+    return $infobox;
+  }
+
+  /*
+   * Input validation for required fields or contain invalid characters.
+   * @param array $postdata
+   * @param array $reqdfields
+   * @param array $reqdfieldsn
+   * @param int $info_type
+   * @param array $message
+   * @param string $title_when_list
+   */
+  function InputValidation($postdata, $reqdfields, $reqdfieldsn,
+                           $info_type, $message) {
+
+    /* check for bad control characters */
+    foreach ($postdata as $pn => $pd) {
+      if (is_string($pd) && preg_match("/[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f]/", $pd)) {
+        $message[] = str_replace('__PN__', $pn, $this->lang['hooks']['errmsg'][61]);
+      }
+    }
+
+    for ($i = 0; $i < count($reqdfields); $i++) {
+      if (!isset($_POST[$reqdfields[$i]]) || ($_POST[$reqdfields[$i]] == "")) {
+        $message[] = str_replace('__REQDFIELDSN__', $reqdfieldsn[$i], $this->lang['hooks']['errmsg'][62]);
+      }
+    }
+
+    if (isset($message)) { $info_type = __INFO_ERROR__; }
+  }
+
+  /*
+   * Display percentage bar
+   * @param int $usage (in %)
+   */
+  function DisplayUsage($usage){
+    if (!is_numeric($usage)) { echo __UNDEFINED__; }
+
+    $html = "<img src=\"" . $this->imgdir() . "bar_left.gif\" name=\"bar_left_img\" height=\"15\" width=\"1\" border=\"0\" align=\"absmiddle\" style=\"vertical-align: middle;\">" .
+            "<img src=\"" . $this->imgdir() . "bar_blue.gif\" name=\"bar_blue_img\" height=\"15\" width=\"" . $usage . "\" border=\"0\" align=\"absmiddle\" style=\"vertical-align: middle;\">" .
+            "<img src=\"" . $this->imgdir() . "bar_gray.gif\" name=\"bar_gray_img\" height=\"15\" width=\"" . (100 - $usage) . "\" border=\"0\" align=\"absmiddle\" style=\"vertical-align: middle;\">" .
+            "<img src=\"" . $this->imgdir() . "bar_right.gif\" name=\"bar_right_img\" height=\"15\" width=\"1\" border=\"0\" align=\"absmiddle\" style=\"vertical-align: middle;\">" .
+            "&nbsp;<span name=\"usage_text\">" . $usage . "%</span>\n";
+
+    echo $html;
+  }
+  
+   /*
+   * Display Free Space
+   * @param string $device_name (this parm is lvname or mdname)
+   * @param string $volume_name
+   */
+  function DisplayFree($device_name, $volume_name){
+    if ($device_name == '' || $volume_name == '') { return; }
+    $volObj = new wixVolume();
+    $html = "&nbsp;" . htmlspecialchars($this->lang['status']['system']['volfree']) . ":&nbsp;" . $volObj->TotalFree($device_name, $volume_name);
+
+    echo $html;
+  }
+
+  /*
+   * Display ON/OFF information
+   * @param string $value allowed __ON__, __OFF__
+   */
+  function DisplayONOFF($value, $isEnabled = 'yes'){
+    switch($value){
+      case __ON__:
+        if($isEnabled == 'yes')
+          echo $this->Image(__IMG_ENABLE__,  __STR_ENABLED__,  "", "vertical-align: middle;");
+        else
+          echo $this->Image(__IMG_ENABLE_GRAY__,  __STR_ENABLED__,  "", "vertical-align: middle;");
+        break;
+      case __OFF__:
+        echo $this->Image(__IMG_DISABLE__, __STR_DISABLED__, "", "vertical-align: middle;");
+        break;
+      default:
+        echo __UNDEFINED__;
+    }
+  }
+
+  /*
+   * setTimeout() of javascript within specified redirected page
+   * @param string $page
+   * @param variable $head_js
+   * @param variable $onload_jsfun
+   * @param int $timeout
+   */
+  function jsTimeoutGo($page, &$head_js, &$onload_jsfun, $timeout = 5000){
+    if (!isset($timeout)) { $timeout = 5000; } // milliseconds
+
+    if ($page != ""){
+$head_js .= <<<EOD
+
+<script type="text/javascript">
+<!--
+function __toThisPage() {
+EOD;
+    $head_js .= "window.open('" . $page . "', '_self');";
+$head_js .= <<<EOD
+}
+-->
+</script>
+EOD;
+      $onload_jsfun .= ";setTimeout('__toThisPage()', " . $timeout . ");";
+    }
+  }
+}
+
+
+function displayPATH($aryPathContent){
+  echo "<div style=\"text-align: left;\">\n";
+  echo "<table cellpadding=\"0\" cellspacing=\"0\" class=\"tbPath\">\n";
+  echo "\t<tr>\n";
+  echo "\t\t<td colspan=\"2\" class=\"vncellempty\">\n";
+
+  $total = count($aryPathContent);
+  for($i=0;$i<$total;$i++) {
+    $link = $aryPathContent[$i]['link'];
+    $desc = $aryPathContent[$i]['desc'];
+    echo "\t\t\t<a href=\"{$link}\">{$desc}</a>\n";
+
+    if(($i+1)<$total) {
+      echo "\t\t\t|\n";
+    }
+  }
+
+  echo "\t\t</td>\n";
+  echo "\t</tr>\n";
+  echo "</table>\n";
+  echo "</div>\n";
+}
+function displayIndexPage($aryContent, $has_trbr = true){
+    echo "<table cellpadding=\"0\" cellspacing=\"0\" class=\"tbSetup\" style=\"{$css_str}\">\n";
+    
+    if($has_trbr) {
+      echo "\t<tr><td colspan=\"7\" class=\"br_separator\">&nbsp;</td></tr>\n";
+    }
+
+    $k = 0;
+    $total = count($aryContent);
+    $rows = ceil($total/4);
+
+    for($i=1;$i<=$rows;$i++) { // for row
+        echo "\t<tr>\n";
+        for($j=1;$j<=4;$j++) { // for items in each row
+            $link = $aryContent[$k][0];
+            $icon = $aryContent[$k][1];
+            $desc = $aryContent[$k][2];
+            $lock = $aryContent[$k][3];
+            $new  = $aryContent[$k][4];
+            $other = $aryContent[$k++][5];
+
+
+            $link = ($link)?$link:'#';
+            // print item
+            if($link=='__POP_UP_DIALOG__'){
+              echo "\t\t<td class=\"items\">\n";
+              echo "\t\t\t<table cellpadding=\"0\" cellspacing=\"0\" onClick=\"alert('{$other}');\" style=\"cursor: pointer;\">\n";
+              echo "\t\t\t\t<tr><td class=\"icon\"><a href=\"#\"><img src=\"/img/{$icon}\" width=\"64\" height=\"64\"></a></td></tr>\n";
+              echo "\t\t\t\t<tr><td class=\"desc\"><a href=\"#\">{$desc}</a></td></tr>\n";
+              echo "\t\t\t</table>\n";
+              echo "\t\t</td>\n";
+            } else if($icon && $desc) {
+              echo "\t\t<td class=\"items\">\n";
+              if ($lock) {
+                echo "\t\t\t<table cellpadding=\"0\" cellspacing=\"0\">\n";
+                echo "\t\t\t\t<tr><td class=\"icon\"><img class=\"gray\" src=\"/img/{$icon}\" width=\"64\" height=\"64\">".
+                                              ($new?'<img src="/extras/images/icon_new.gif" style="width:32px; float:right; padding:0 10px 0 0;">':'')."</td></tr>\n";
+                echo "\t\t\t\t<tr><td class=\"desc\" style=\"color:darkgray;\">{$desc}</td></tr>\n";
+                echo "\t\t\t</table>\n";
+              } else {
+                echo "\t\t\t<table cellpadding=\"0\" cellspacing=\"0\" onClick=\"document.location.href={$link}; {$other}\" style=\"cursor: pointer;\">\n";
+                echo "\t\t\t\t<tr><td class=\"icon\"><a href=\"{$link}\"><img src=\"/img/{$icon}\" width=\"64\" height=\"64\"></a>".
+                                              ($new?'<img src="/extras/images/icon_new.gif" style="width:32px; float:right; padding:0 10px 0 0;">':'')."</td></tr>\n";
+                echo "\t\t\t\t<tr><td class=\"desc\"><a href=\"{$link})\">{$desc}</a></td></tr>\n";
+                echo "\t\t\t</table>\n";
+              }
+              echo "\t\t</td>\n";
+            } else {
+              echo "\t\t<td class=\"items\">&nbsp</td>\n";
+            }
+
+            if($j<4) {
+                // print column separator
+                echo "\t\t<td class=\"separator\">&nbsp;</td>\n";
+            }
+        }
+        echo "\t</tr>\n";
+        if(($i+1)<=$rows){
+          echo "\t<tr><td colspan=\"7\" class=\"br_separator\">&nbsp;</td></tr>\n";
+        }
+    }
+    echo "</table>\n";
+}
+
+function displayRtnMessage($type, $message) {
+  if ($type != __INFO_SUCCESS__ &&
+      $type != __INFO_WARNING__ &&
+      $type != __INFO_ERROR__) {
+    return;
+  }
+
+  if ($message == '') { return ''; }
+  if (is_array($message)&&empty($message)) { return ''; }
+
+  global $lang;
+  $msg_type = array(__INFO_SUCCESS__=>'ok',
+                    __INFO_WARNING__=>'exclam',
+                    __INFO_ERROR__=>'err');
+
+  if (!empty($_SESSION['wix_debug_message'])) {
+    echo "<table cellpadding=\"0\" cellspacing=\"0\" class=\"tbSetup\"><tr><td colspan=\"2\" class=\"vncellreq\" style=\"width: 450px;\">";
+    echo "<u>DEBUG MESSAGE:</u><br>";
+    echo nl2br(htmlspecialchars($_SESSION['wix_debug_message']));
+    $_SESSION['wix_debug_message'] = ''; // empty
+    @session_write_close();
+    echo "</td></tr>\n";
+  }  
+  
+  echo "<span id=\"span_rtnMessage\"><table cellpadding=\"0\" cellspacing=\"0\" class=\"tbMessage\"><tr><td>\n";
+  echo "\t<div class=\"column span-13 prepend-3 append-2 last\" id=\"rtnMessage\">\n";
+  echo "\t\t<div class=\"msg\">\n";
+  echo "\t\t\t<ul class=\"".$msg_type[$type]."\" style=\"padding-left: 5px; padding-top: 5px; padding-bottom: 5px;\">\n";
+
+  // the following input errors were detected
+  if (is_array($message)) {
+    echo "\t\t\t\t<h2>".$lang['hooks']['errmsg'][60]."</h2>\n";
+
+    foreach ($message as $err) {
+      echo "\t\t\t\t\t<li>".htmlspecialchars($err)."</li>\n";
+    }
+  } else {
+    echo "\t\t\t\t<h2>{$message}</h2>\n";
+  }  
+
+  echo "\t\t\t</ul>\n";
+  echo "\t\t</div>\n";
+  echo "\t</div>\n";
+  echo "</td></tr></table></span>\n";
+}
+?>

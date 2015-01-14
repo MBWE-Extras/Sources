@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @version $Id: wixLang.class,v 1.5 2007/09/07 06:44:47 wiley Exp $
+ * @author Wiley Li <wileyli@wistron.com.tw>
+ * @copyright Copyright (c) 2004 Wistron Corporation.
+ */
+
+require_once('wixConfig.class');
+
+// Read Default Config File
+$confObj = new wixConfig();
+$conf    = $confObj->ReadConfig();
+
+class wixLang extends wixConfig{
+  var $directory;
+  var $filename;
+  var $lang;
+
+  function wixLang($encoding = 'UTF-8'){
+    parent::wixConfig();
+
+    global $conf;
+
+    $this->directory = $this->sys_var['www_path'] .
+                       '/' .
+                       $this->sys_var['lang_dir_name'];
+
+    if (!isset($GLOBALS["language"]) || $GLOBALS["language"] == "") {
+      $GLOBALS["language"] = 'en'; // english by default
+    }
+
+    $this->filename = $this->directory .
+                      '/' .
+                      $GLOBALS["language"] .
+                      '.xml';
+
+    if(!file_exists($this->filename))
+      die("<strong>PANIC: The resource file for multilingual cannot be found!</strong>");
+
+    $this->lang = parent::ParseXML($this->filename,
+                                   $this->sys_var['xml_rootobj'],
+                                   $encoding);
+  }
+
+  /*
+   * @return array
+   */
+  function LangInit(){
+    return $this->lang;
+  }
+}
+
+?>

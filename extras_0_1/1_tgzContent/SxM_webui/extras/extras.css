@@ -1,0 +1,163 @@
+/*-----------------------------------------------------------------------------
+    Extras manage page
+-----------------------------------------------------------------------------*/
+#manage {
+    float:left;
+    overflow:hidden;
+    display:inline-block;
+}
+
+/*-----------------------------------------------------------------------------
+    Extras manage page :packs listbox
+-----------------------------------------------------------------------------*/
+#mpacks {
+    width:220px;
+    max-height:340px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    margin:0px 0px 0px 5px;
+    text-align:left;
+    border:2px solid brown;
+    background-color:white;
+    display:inline-block;
+}
+
+#mpacks li {
+    display:block;
+    padding:10px 0px 10px 0px;
+    border-bottom:1px dotted brown;
+    margin:0;
+    text-decoration:none;
+    color:darkblue;
+}
+
+#mpacks li:last-child {
+    border-bottom:none;
+}
+
+#mpacks li:hover {
+    background-color:#2ee;
+}
+
+#mpacks li:active {
+    background-color:#2ff;
+}
+
+#mpacks li.selected {
+    background-color:#2ff;
+    color:red;
+}
+
+#mpacks img {
+    width:32px;
+    height:32px;
+    margin:0px 5px 0px 5px;
+    vertical-align:middle;
+}
+
+#mpacks img.imgstate {
+    float:right;
+}
+/*-----------------------------------------------------------------------------
+    Extras manage page :pack informations
+-----------------------------------------------------------------------------*/
+.infopack {
+    width:560px;
+    height:385px;
+    float:right;
+    overflow:hidden;
+    display:inline-block;
+    overflow-y:hidden;
+    vertical-align:top;
+}
+
+.mpack {
+    display:none;
+}
+
+.dpack {
+    vertical-align:top;
+    display:inline-block;
+}
+
+.dpack p {
+    display:inline; 
+    padding:0;
+    margin:0; 
+}
+
+.imgpack {
+    vertical-align:top;
+    display:inline-block;
+    border:2px solid brown;
+    box-shadow:0 0.3em 1em #000000;
+    margin:0px 15px 0px 0px;
+    float:right;
+}
+
+.imgpack img {
+    max-width:300px;
+    max-height:200px;
+}
+
+.areapack {
+    max-height:150px;
+    min-height:150px;
+    max-width:520px;
+    min-width:520px;
+    resize:none; 
+    border:1px; 
+    cellpadding:3px; 
+    cellspacing:1px;
+    display:inline;
+    text-align:left;
+    border:2px solid brown;
+    box-shadow:0 0.3em 1em #000000;
+}
+
+/*-----------------------------------------------------------------------------
+    Extras manage page : install/uninstall modal popup
+-----------------------------------------------------------------------------*/
+#modalCheck {
+    display:none;
+}
+
+.modalLayer {
+    display:none;
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background-color:rgba(0, 0, 0, 0.5);
+}
+
+#modalCheck:checked + .modalLayer {
+    display:block;
+}
+
+.modalPopup {
+    background: 
+       url('images/icon_extras.gif') left  no-repeat,
+       url('images/icon_loader.gif') left  65px center no-repeat,
+       url('images/icon_loader.gif') right 70px center no-repeat,
+       url('images/icon_extras.gif') right no-repeat,
+       white;
+    padding:10px;
+    border:20px solid #1ee;
+    position:relative;
+    margin:250px auto;
+    width:600px;
+    box-shadow:0px 0px 20px #000;
+    border-radius:10px;
+}
+
+.modalPopup p {
+    color:darkblue;
+    font-size:20px;
+    font-family:tahoma;
+    margin:0px 50px 0px 50px;
+}
+/*-----------------------------------------------------------------------------
+    Extras : end of CSS
+-----------------------------------------------------------------------------*/
