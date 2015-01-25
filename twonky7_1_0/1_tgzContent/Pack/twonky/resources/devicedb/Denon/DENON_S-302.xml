@@ -1,0 +1,17 @@
+<Client>
+	<DeviceId>
+		<DisplayName>DENON S-302</DisplayName>
+		<DeviceDescriptionRecognition>
+			<DescriptionText>S-302</DescriptionText>
+		</DeviceDescriptionRecognition>
+		<MappingUpdatePolicy>FIX</MappingUpdatePolicy>
+	</DeviceId>
+	<Capabilities>
+		<Scaling>
+			<Target>JPEG1920x1080</Target>
+		</Scaling>
+	</Capabilities>
+	<DeviceQuirks>
+		<Quirk>CANNOTREGISTERDEVICE</Quirk>
+	</DeviceQuirks>
+</Client>

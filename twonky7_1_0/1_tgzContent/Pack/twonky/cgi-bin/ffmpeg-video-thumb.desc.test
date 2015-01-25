@@ -1,0 +1,9 @@
+# generate video thumbs
+#(c) 2010 by PacketVideo
+exec: ffmpeg -itsoffset $videothumbtime  -i $infile -vcodec mjpeg -vframes 1 -an -f rawvideo -s $targetgeometry $outfile
+#exec: ffmpeg -itsoffset -30 -i $infile -vcodec mjpeg -vframes 1 -an -f rawvideo -s 284x160 $outfile
+# capabilities
+from=video/*
+to=image/jpeg
+videothumb
+synchronous

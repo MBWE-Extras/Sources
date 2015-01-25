@@ -1,0 +1,14 @@
+<view name='byfolder' path='folder.view'>
+	<navtree>
+		<container id='music'>
+			<link id='music/folders' />
+		</container>
+		<container id='picture' >
+			<link id='picture/folders' />
+		</container>
+		<container id='video' >
+			<link id='video/folders' />
+		</container>
+			<link id='video/folders' />
+	</navtree>
+</view>

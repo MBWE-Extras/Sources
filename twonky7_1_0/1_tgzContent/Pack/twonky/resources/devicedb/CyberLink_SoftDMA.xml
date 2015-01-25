@@ -1,0 +1,11 @@
+<Client>
+	<DeviceId>
+		<DisplayName>CyberLink SoftDMA</DisplayName>
+		<HttpRecognition>
+			<HttpText>Intel_MicroStack</HttpText>
+		</HttpRecognition>
+	</DeviceId>
+	<DeviceQuirks>
+		<Quirk>IGNORE_PROTECTION_RES</Quirk>
+	</DeviceQuirks>
+</Client>

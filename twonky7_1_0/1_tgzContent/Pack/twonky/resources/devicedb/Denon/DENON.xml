@@ -1,0 +1,13 @@
+<Client>
+	<DeviceId>
+		<DisplayName>DENON</DisplayName>
+		<DeviceDescriptionRecognition>
+			<DescriptionText>DENON</DescriptionText>
+		</DeviceDescriptionRecognition>
+		<MappingUpdatePolicy>FIX</MappingUpdatePolicy>
+	</DeviceId>
+	<DeviceQuirks>
+		<Quirk>CANNOTREGISTERDEVICE</Quirk>
+		<Quirk>NOTRPICS</Quirk>
+	</DeviceQuirks>
+</Client>
